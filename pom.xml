@@ -12,13 +12,16 @@
     <name>shiro-test-dan</name>
 
     <modules>
+        <module>cacheImpl</module>
         <module>appone</module>
+        <module>apptwo</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <shiro.version>1.2.1</shiro.version>
+        <ehcache.version>2.5.2</ehcache.version>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +42,12 @@
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-ehcache</artifactId>
                 <version>${shiro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache-core</artifactId>
+                <version>${ehcache.version}</version>
             </dependency>
 
             <dependency>

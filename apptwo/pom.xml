@@ -10,12 +10,12 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>appone</artifactId>
+    <artifactId>apptwo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>war</packaging>
 
-    <name>appone Maven Webapp</name>
+    <name>apptwo Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
@@ -53,4 +53,5 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
+
 </project>
