@@ -18,7 +18,7 @@ public class MyCache implements Cache {
     private final File diskFile;
 
     public MyCache(final String name) {
-        diskFile = new File(System.getProperty("java.io.temp"), name);
+        diskFile = new File(System.getProperty("java.io.tmpdir"), name);
     }
 
 
