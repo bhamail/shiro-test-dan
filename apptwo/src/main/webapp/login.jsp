@@ -10,14 +10,14 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page2</title>
+    <title>JSP Page 2</title>
 </head>
 <body>
 
-<h1>2 Hello principal: <shiro:principal />. </h1>
+<%--<h1>2 Hello principal: <shiro:principal />. </h1>--%>
 
 
-<h1>Login</h1>
+<h1>Login 2</h1>
 <form method="POST" action="login.jsp">
     Username: <input type="text" name="username"/> <br/>
     Password: <input type="password" name="password"/> <br />

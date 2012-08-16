@@ -25,6 +25,9 @@
 -->
     </filter-mapping>
 
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 
-  <display-name>WebApp - App Two</display-name>
+    <display-name>WebApp - App Two</display-name>
 </web-app>
