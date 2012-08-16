@@ -15,7 +15,7 @@ import java.util.*;
 public class MyCache implements Cache {
 
     private Hashtable<Object, Object> map = new Hashtable<Object, Object>();
-    private Storage storage;
+    private final Storage storage;
 
     public MyCache(final Storage storage) {
         this.storage = storage;
