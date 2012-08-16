@@ -7,32 +7,28 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A really crude disk based map. Saves after every change. Loads before every read.
+ * A really crude map cache. Saves after every change. Loads before every read.
  * User: dan
  * Date: 8/14/12
  * Time: 4:11 PM
  */
 public class MyCache implements Cache {
 
-    private Hashtable<Object, Object> diskProps = new Hashtable<Object, Object>();
-    private final File diskFile;
+    private Hashtable<Object, Object> map = new Hashtable<Object, Object>();
+    private Storage storage;
 
-    public MyCache(final String name) {
-        diskFile = new File(System.getProperty("java.io.tmpdir"), name);
+    public MyCache(final Storage storage) {
+        this.storage = storage;
+        storage.initStore(map);
     }
 
-
     private synchronized void store() {
-        DiskObject.store(diskFile, diskProps);
+        storage.store(map);
     }
 
     private synchronized void load() {
-        if (!diskFile.exists()) {
-            DiskObject.store(diskFile, diskProps);
-        }
-
         //noinspection unchecked
-        diskProps = (Hashtable<Object, Object>) DiskObject.load(diskFile);
+        map = (Hashtable<Object, Object>) storage.load();
     }
 
 
@@ -48,7 +44,7 @@ public class MyCache implements Cache {
     @Override
     public Object get(Object key) throws CacheException {
         load();
-        return diskProps.get(key);
+        return map.get(key);
     }
 
     /**
@@ -63,7 +59,7 @@ public class MyCache implements Cache {
     @Override
     public Object put(Object key, Object value) throws CacheException {
         try {
-            return diskProps.put(key, value);
+            return map.put(key, value);
         } finally {
             store();
         }
@@ -80,7 +76,7 @@ public class MyCache implements Cache {
     @Override
     public Object remove(Object key) throws CacheException {
         try {
-            return diskProps.remove(key);
+            return map.remove(key);
         } finally {
             store();
         }
@@ -95,7 +91,7 @@ public class MyCache implements Cache {
     @Override
     public void clear() throws CacheException {
         try {
-            diskProps.clear();
+            map.clear();
         } finally {
             store();
         }
@@ -109,7 +105,7 @@ public class MyCache implements Cache {
     @Override
     public int size() {
         load();
-        return diskProps.size();
+        return map.size();
     }
 
     /**
@@ -120,7 +116,7 @@ public class MyCache implements Cache {
     @Override
     public Set keys() {
         load();
-        return diskProps.keySet();
+        return map.keySet();
     }
 
     /**
@@ -131,6 +127,6 @@ public class MyCache implements Cache {
     @Override
     public Collection values() {
         load();
-        return diskProps.values();
+        return map.values();
     }
 }

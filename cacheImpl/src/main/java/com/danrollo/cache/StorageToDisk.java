@@ -8,16 +8,26 @@ import java.io.*;
  * Date: 8/15/12
  * Time: 7:57 PM
  */
-class DiskObject {
+class StorageToDisk extends Storage {
 
-    static void store(final File diskFile, final Serializable objectToStore) {
+    private final File diskFile;
+
+    StorageToDisk(final String name) {
+        super(name);
+        diskFile = new File(System.getProperty("java.io.tmpdir"), name);
+    }
+
+    @Override
+    public void initStore(Serializable itemToStore) {
+        // do not create file if it already exists
+        if (!diskFile.exists()) {
+            store(itemToStore);
+        }
+    }
+
+    @Override
+    public void store(final Serializable objectToStore) {
         try {
-
-            if (!diskFile.exists()) {
-                if (!diskFile.createNewFile()) {
-                    throw new IllegalStateException("Could not create cache file: " + diskFile.getCanonicalPath());
-                }
-            }
 
             final FileOutputStream fos = new FileOutputStream(diskFile);
             try {
@@ -32,13 +42,13 @@ class DiskObject {
             }
 
         } catch (IOException e) {
-            throw new IllegalStateException("Could not save object to disk.", e);
+            throw new RuntimeException("Could not save object to disk.", e);
         }
     }
 
-    static Object load(final File diskFile) {
+    @Override
+    public Object load() {
         try {
-
             final FileInputStream fis = new FileInputStream(diskFile);
             try {
                 final ObjectInputStream is = new ObjectInputStream(fis);
