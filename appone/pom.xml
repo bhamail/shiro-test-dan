@@ -52,5 +52,13 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
+
+
+        <!-- deps below only needed for adding jsp page features. -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

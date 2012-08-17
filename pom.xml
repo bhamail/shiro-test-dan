@@ -62,6 +62,13 @@
                 <version>1.1.1</version>
             </dependency>
 
+            <!-- deps below only needed for adding jsp page features. -->
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>6.0.33</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
