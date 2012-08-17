@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
- * A simple impl of the SessionDAO interface to provide shared, external backing storage for session objects.
+ * A simple impl of the SessionDAO interface to provide a shared, external backing storage for session objects.
  * User: dan
  * Date: 8/16/12
  * Time: 11:41 AM
