@@ -4,7 +4,7 @@ shiro-test-dan
 Simple Test project(s) using Shiro
 
 
-The branches contains various experiments.
+The branches contain various experiments:
 
     * minimalSSOWithCache - Contains only a custom SessionDAO implementation (MySesssionDAOToDisk).
                             Shiro is configured to use Ehcache for caching.
