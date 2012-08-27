@@ -3,7 +3,6 @@ package com.danrollo.cache;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -58,6 +57,7 @@ public class MyCache implements Cache {
      */
     @Override
     public Object put(Object key, Object value) throws CacheException {
+        load();
         try {
             return map.put(key, value);
         } finally {
@@ -75,6 +75,7 @@ public class MyCache implements Cache {
      */
     @Override
     public Object remove(Object key) throws CacheException {
+        load();
         try {
             return map.remove(key);
         } finally {
@@ -90,6 +91,7 @@ public class MyCache implements Cache {
      */
     @Override
     public void clear() throws CacheException {
+        load();
         try {
             map.clear();
         } finally {
