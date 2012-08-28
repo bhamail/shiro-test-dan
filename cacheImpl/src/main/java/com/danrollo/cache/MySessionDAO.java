@@ -42,6 +42,7 @@ public class MySessionDAO extends CachingSessionDAO {
      */
     @Override
     protected void doUpdate(Session session) {
+        load();
         map.put(session.getId(), session);
         store();
     }
@@ -53,6 +54,7 @@ public class MySessionDAO extends CachingSessionDAO {
      */
     @Override
     protected void doDelete(Session session) {
+        load();
         map.remove(session.getId());
         store();
     }
@@ -78,6 +80,7 @@ public class MySessionDAO extends CachingSessionDAO {
             throw new IllegalArgumentException("Unexpected session class for session: " + session);
         }
 
+        load();
         map.put(sessionId, session);
         store();
         return sessionId;
