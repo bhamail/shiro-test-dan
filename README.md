@@ -47,3 +47,7 @@ Setup
 
         apache-tomcat-6.0.35$ bin/catalina.sh jpda start
 
+
+I'm also experimenting with publishing the maven site for this project on github gh-pages. (wagon-scm)[http://maven.apache.org/wagon/wagon-providers/wagon-scm/usage.html]
+
+The resulting site is available here: [http://bhamail.github.com/shiro-test-dan/]
