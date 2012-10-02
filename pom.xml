@@ -119,6 +119,37 @@
                 </configuration>
             </plugin>
         </plugins>
+
+
+        <!-- Begin: extensions to publish site to github gh-pages. -->
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-scm</artifactId>
+                <version>2.2</version>
+            </extension>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-manager-plexus</artifactId>
+                <version>1.8</version>
+            </extension>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-provider-gitexe</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
+        <!-- End: extensions to publish site to github gh-pages. -->
+
     </build>
+
+    <distributionManagement>
+        <site>
+            <id>site</id>
+            <url>scm:git:ssh://git@github.com/bhamail/shiro-test-dan.git</url>
+            <!--<url>scm:git:ssh://git@github.com:bhamail/shiro-test-dan.git</url>-->
+                               <!--git@github.com:bhamail/shiro-test-dan.git-->
+        </site>
+    </distributionManagement>
 
 </project>
