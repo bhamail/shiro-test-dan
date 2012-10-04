@@ -38,8 +38,6 @@
 
         <shiro.version>1.2.1</shiro.version>
         <ehcache.version>2.5.2</ehcache.version>
-
-        <github.global.server>github-project-site</github.global.server>
     </properties>
 
     <dependencyManagement>
