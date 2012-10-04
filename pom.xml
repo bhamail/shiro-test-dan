@@ -13,16 +13,10 @@
 
     <url>https://github.com/bhamail/shiro-test-dan.git</url>
 
-    <scm>
-        <url>scm:git:https://github.com/bhamail/shiro-test-dan.git</url>
-        <connection>scm:git:git://github.com/bhamail/shiro-test-dan.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:bhamail/shiro-test-dan.git</developerConnection>
-    </scm>
-
     <distributionManagement>
         <site>
             <id>github-project-site</id>
-            <url>scm:git:ssh://git@github.com/bhamail/shiro-test-dan.git</url>
+            <url>gitsite:git@github.com/tomjones/my-project.git</url>
         </site>
     </distributionManagement>
 
@@ -134,27 +128,27 @@
                     <server>mylocalserver</server>
                 </configuration>
             </plugin>
-
-
-            <!-- Begin: support publish site to github gh-pages. -->
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>0.7</version>
-                <configuration>
-                    <message>Creating site for ${project.version}</message>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site</phase>
-                    </execution>
-                </executions>
-            </plugin>            <!-- End: support publish site to github gh-pages. -->
-
         </plugins>
+
+        <!-- Begin: support publish site to github gh-pages. -->
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-provider-gitexe</artifactId>
+                <version>1.3</version>
+            </extension>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-manager-plexus</artifactId>
+                <version>1.3</version>
+            </extension>
+            <extension>
+                <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+                <artifactId>wagon-gitsite</artifactId>
+                <version>0.4-SNAPSHOT</version>
+            </extension>
+        </extensions>
+        <!-- End: support publish site to github gh-pages. -->
 
     </build>
 
