@@ -51,6 +51,9 @@ Setup
 I'm also experimenting with publishing the maven site for this project on github gh-pages.
 See: [wagon-scm -> Deploying your Maven site to GitHub's gh-pages](http://maven.apache.org/wagon/wagon-providers/wagon-scm/usage.html).
 Doh! It looks like that approach is doomed: http://jira.codehaus.org/browse/WAGON-374.
-Let's try this instead: http://maven.apache.org/plugins/maven-scm-publish-plugin/.
+
+Let's try this instead: http://maven.apache.org/plugins/maven-scm-publish-plugin/. Well, that example (if run with the default user.dir) could end up deleting your entire home directory. Don't try that either.
+
+OK, here's another approach: https://github.com/github/maven-plugins/.
 
 The resulting site is available here: http://bhamail.github.com/shiro-test-dan/.
