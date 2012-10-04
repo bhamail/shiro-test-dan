@@ -60,6 +60,7 @@ Ick. Don't try that either.
 OK, here's another approach: https://github.com/github/maven-plugins/.
 Well, that was closer, and at least not destructive, but still no joy.
 
-How about Kathryn's plugin: https://github.com/khuxtable/wagon-gitsite. See [Instructions](http://khuxtable.github.com/wagon-gitsite/).
+How about Kathryn's plugin: https://github.com/khuxtable/wagon-gitsite.
+Oops, looks like Stephens gitsite fork is more recent/active: http://stephenc.github.com/wagon-gitsite. See [Instructions](http://stephenc.github.com/wagon-gitsite/).
 
 The resulting site is available here: http://bhamail.github.com/shiro-test-dan/.
