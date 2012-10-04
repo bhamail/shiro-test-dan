@@ -53,7 +53,7 @@ See: [wagon-scm -> Deploying your Maven site to GitHub's gh-pages](http://maven.
 Doh! It looks like that approach is doomed: http://jira.codehaus.org/browse/WAGON-374.
 
 Let's try this instead: http://maven.apache.org/plugins/maven-scm-publish-plugin/.
-Well, that example, if run with the default user.home dir in shown in (Maven Multi Module Configuration)[http://maven.apache.org/plugins/maven-scm-publish-plugin/examples/multi-module-configuration.html]
+Well, that example, if run with the default user.home dir in shown in [Maven Multi Module Configuration](http://maven.apache.org/plugins/maven-scm-publish-plugin/examples/multi-module-configuration.html)
 could end up deleting your entire home directory. Don't try that either.
 
 OK, here's another approach: https://github.com/github/maven-plugins/.
