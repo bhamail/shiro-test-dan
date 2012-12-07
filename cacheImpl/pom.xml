@@ -36,6 +36,38 @@
             <artifactId>shiro-ehcache</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>yadda</groupId>
+            <artifactId>waffle-jna</artifactId>
+            <version>1.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../3rd-lib/waffle1.5/Waffle/Bin/waffle-jna.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>platform</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>yadda</groupId>
+            <artifactId>waffle-tomcat6</artifactId>
+            <version>1.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../3rd-lib/waffle1.5/Waffle/Bin/waffle-tomcat6.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
