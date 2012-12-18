@@ -46,3 +46,5 @@ Setup
     * You can launch a locally installed tomcat with remote debugging enabled on port 8000 using:
 
         apache-tomcat-6.0.35$ bin/catalina.sh jpda start
+
+     Once deployed, you can login to each webapp with uid: admin, pwd: secret (see shiro.ini).
