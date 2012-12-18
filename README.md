@@ -19,7 +19,7 @@ Setup
 
 * To deploy to a local running tomcat 6 instance, make the following changes:
 
- ** Add a server block to .m2/settings.xml:
+ 1. Add a server block to .m2/settings.xml:
 
             <servers>
             ...
@@ -29,22 +29,22 @@ Setup
                     <password>tomcat</password>
                 </server>
 
- ** Add user/perms in tomcat/conf/tomcat-users.xml:
+ 2. Add user/perms in tomcat/conf/tomcat-users.xml:
 
                       <role rolename="tomcat"/>
                       <user username="tomcat" password="tomcat" roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"/>
 
- ** Deploy to the local tomcat 6 instance using:
+ 3. Deploy to the local tomcat 6 instance using:
 
         mvn clean package tomcat6:redeploy
 
- The apps will be available at:
+   The apps will be available at:
 
         http://localhost:8080/appone/
         http://localhost:8080/apptwo/
 
- ** You can launch a locally installed tomcat with remote debugging enabled on port 8000 using:
+ 4. You can launch a locally installed tomcat with remote debugging enabled on port 8000 using:
 
     apache-tomcat-6.0.35$ bin/catalina.sh jpda start
 
- Once deployed, you can login to each webapp with uid: admin, pwd: secret (see cacheImpl/src/main/resources/shiro.ini).
+   Once deployed, you can login to each webapp with uid: admin, pwd: secret (see cacheImpl/src/main/resources/shiro.ini).
