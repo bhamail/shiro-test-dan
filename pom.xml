@@ -22,6 +22,9 @@
 
         <shiro.version>1.2.1</shiro.version>
         <ehcache.version>2.5.2</ehcache.version>
+
+        <!-- relative path only used in appone, apptwo sub modules. -->
+        <dir.waffle-jars>${project.basedir}/../3rd-lib/waffle1.5/Waffle/Bin/</dir.waffle-jars>
     </properties>
 
     <dependencyManagement>
@@ -106,6 +109,20 @@
                     <server>mylocalserver</server>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${dir.waffle-jars}</directory>
+                            <targetPath>WEB-INF/lib</targetPath>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
