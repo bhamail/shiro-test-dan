@@ -18,5 +18,9 @@
     <input type="checkbox" name="rememberMe" value="true"/>Remember Me? <br/>
     <input type="submit" name="submit" value="Login" />
 </form>
+
+<br>
+remote user <b><%= request.getRemoteUser() %></b> in session <b><%= session.getId() %></b>.<br>
+
 </body>
 </html>

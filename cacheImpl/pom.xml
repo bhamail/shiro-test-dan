@@ -45,11 +45,13 @@
         </dependency>
 
         <dependency>
-            <groupId>yadda</groupId>
+            <groupId>com.github.dblock.waffle</groupId>
             <artifactId>waffle-jna</artifactId>
             <version>1.5</version>
+<!--
             <scope>system</scope>
             <systemPath>${basedir}/../3rd-lib/waffle1.5/Waffle/Bin/waffle-jna.jar</systemPath>
+-->
         </dependency>
         <dependency>
             <groupId>net.java.dev.jna</groupId>
@@ -62,11 +64,13 @@
             <version>3.5.1</version>
         </dependency>
         <dependency>
-            <groupId>yadda</groupId>
+            <groupId>com.github.dblock.waffle</groupId>
             <artifactId>waffle-tomcat6</artifactId>
             <version>1.5</version>
+<!--
             <scope>system</scope>
             <systemPath>${basedir}/../3rd-lib/waffle1.5/Waffle/Bin/waffle-tomcat6.jar</systemPath>
+-->
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

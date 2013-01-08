@@ -6,5 +6,8 @@
 <h1>Hello principal: <shiro:principal />. </h1>
 <a href="logout">Logout</a>
 
+<br>
+remote user <b><%= request.getRemoteUser() %></b> in session <b><%= session.getId() %></b>.<br>
+
 </body>
 </html>

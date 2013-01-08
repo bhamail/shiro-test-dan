@@ -111,6 +111,7 @@
             </plugin>
 
 
+<!-- Not needed when using installed (non-system) waffle deps
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
@@ -122,6 +123,7 @@
                     </webResources>
                 </configuration>
             </plugin>
+-->
 
         </plugins>
     </build>
