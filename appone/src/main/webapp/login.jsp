@@ -20,7 +20,7 @@
 </form>
 
 <br>
-remote user <b><%= request.getRemoteUser() %></b> in session <b><%= session.getId() %></b>.<br>
+remote user <b><%= request.getRemoteUser() %></b>, principal: <b><%= request.getUserPrincipal() %></b> in session <b><%= session.getId() %></b>.<br>
 
 </body>
 </html>
