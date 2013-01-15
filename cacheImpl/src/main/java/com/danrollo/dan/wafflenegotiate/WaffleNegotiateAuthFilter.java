@@ -1,8 +1,12 @@
 package com.danrollo.dan.wafflenegotiate;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Initializable;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
@@ -26,7 +30,9 @@ import java.io.IOException;
  * Time: 10:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class WaffleNegotiateAuthFilter extends BasicHttpAuthenticationFilter {
+public class WaffleNegotiateAuthFilter extends BasicHttpAuthenticationFilter
+                                       implements Initializable
+{
 
     /**
      * This class's private logger.
@@ -64,19 +70,39 @@ public class WaffleNegotiateAuthFilter extends BasicHttpAuthenticationFilter {
         negotiateFilter.init(getFilterConfig());
     }
 
-        /**
+    /**
+     * Initializes this object.
+     *
+     * @throws org.apache.shiro.ShiroException
+     *          if an exception occurs during initialization.
+     */
+    public void init() throws ShiroException {
+        try {
+            super.init(getFilterConfig());
+        } catch (ServletException e) {
+            throw new ShiroException(e);
+        }
+    }
+
+    /**
          * Used for stub filterChain to know when waffle filter made a call to FilterChain.doFilter().
          */
     final class SignalFilterChain implements FilterChain {
         private boolean wasDoFilterCalled;
+        private ServletRequest lastRequest;
 
         @Override
         public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
             wasDoFilterCalled = true;
+            lastRequest = request;
         }
 
         boolean wasDoFilterCalled() {
             return wasDoFilterCalled;
+        }
+
+        ServletRequest getLastRequest() {
+            return lastRequest;
         }
     }
 
@@ -103,6 +129,7 @@ public class WaffleNegotiateAuthFilter extends BasicHttpAuthenticationFilter {
             negotiateFilter.init(getFilterConfig());
         }
 
+        // @todo reuse as much as possible of NegotiateSecurityFilter.doFilterPrincipal(), and/or call isAccessAllowed() instead
         final HttpSession existingSession = ((HttpServletRequest)request).getSession(false);
         if (existingSession != null) {
             final WindowsPrincipal windowsPrincipal = (WindowsPrincipal) existingSession.getAttribute(PRINCIPAL_SESSION_KEY);
@@ -115,12 +142,20 @@ public class WaffleNegotiateAuthFilter extends BasicHttpAuthenticationFilter {
         final SignalFilterChain signalFilterChain = new SignalFilterChain();
         negotiateFilter.doFilter(request, response, signalFilterChain);
 
-        final HttpSession session = ((HttpServletRequest)request).getSession(false);
+
+        final Subject currentUser = SecurityUtils.getSubject();
+/*
+        if (!currentUser.isAuthenticated()) {
+            return false;
+        }
+*/
+        //final HttpSession session = ((HttpServletRequest)request).getSession(false);
+        final Session session = currentUser.getSession(false);
         if (session == null) {
             return false;
         }
-        javax.security.auth.Subject subject = (javax.security.auth.Subject) session
-                .getAttribute("javax.security.auth.subject");
+        final javax.security.auth.Subject subject
+                = (javax.security.auth.Subject) session.getAttribute("javax.security.auth.subject");
         if (subject == null) {
             return false;
         }
@@ -189,5 +224,22 @@ public class WaffleNegotiateAuthFilter extends BasicHttpAuthenticationFilter {
     }
 */
 
+
+
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        //final boolean defaultValue = super.isAccessAllowed(request, response, mappedValue);
+
+        // @todo reuse as much as possible of NegotiateSecurityFilter.doFilterPrincipal()
+        final HttpSession existingSession = ((HttpServletRequest)request).getSession(false);
+        if (existingSession != null) {
+            final WindowsPrincipal windowsPrincipal = (WindowsPrincipal) existingSession.getAttribute(PRINCIPAL_SESSION_KEY);
+            if (windowsPrincipal != null) {
+                // we already authenticated...
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
