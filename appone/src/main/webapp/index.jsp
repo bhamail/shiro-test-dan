@@ -1,3 +1,4 @@
+<%@ page import="javax.security.auth.Subject" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
 <body>
@@ -7,7 +8,10 @@
 <a href="logout">Logout</a>
 
 <br>
-remote user <b><%= request.getRemoteUser() %></b>, principal: <b><%= request.getUserPrincipal() %></b> in session <b><%= session.getId() %></b>.<br>
+remote user <b><%= request.getRemoteUser() %></b>
+, principal name: <b><%= request.getUserPrincipal().getName() %></b>
+, Subject: <b><%= request.getSession().getAttribute("javax.security.auth.subject") %></b>
+in session <b><%= session.getId() %></b>.<br>
 
 </body>
 </html>
