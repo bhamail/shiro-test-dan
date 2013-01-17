@@ -70,19 +70,21 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
 
 
 
-
+    @Override
     protected AuthenticationToken createToken(final ServletRequest in,
                                               final ServletResponse out) throws Exception {
         final String authorization = getAuthzHeader(in);
         final String[] elements = authorization.split(" ");
         final byte[] inToken = Base64.decode(elements[1]);
+        final NegotiateToken negotiateToken = new NegotiateToken(inToken, new byte[0]);
 
+        // add objects obtained from filter negotiation.
+        // @todo Maybe these negotiations should be done later/elsewhere, perhaps in com.danrollo.negotiate.waffle.NegotiateAuthenticationRealm.doGetAuthenticationInfo()?
+        // However, that would require duplication of a lot of logic that currently exists in the Waffle filter: waffle.servlet.NegotiateSecurityFilter.doFilter()
         final org.apache.shiro.subject.Subject currentUser = SecurityUtils.getSubject();
         final Session session = currentUser.getSession(false);
         final javax.security.auth.Subject subject
                 = (javax.security.auth.Subject) session.getAttribute("javax.security.auth.subject");
-
-        final NegotiateToken negotiateToken = new NegotiateToken(inToken, new byte[0]);
         negotiateToken.setSubject(subject);
 
         final Object windowsPrincipal = ((HttpServletRequest)in).getSession().getAttribute(PRINCIPAL_SESSION_KEY);
@@ -143,6 +145,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
         boolean loggedIn = false; // false by default or we wouldn't be in
         // this method
         //if (isLoginAttempt(request, response)) {
+        // @todo Maybe these negotiations should be done later/elsewhere? see: javadoc for NegotiateAuthenticationFilter.tryLogin()
         if (tryLogin(request, response)) {
             loggedIn = executeLogin(request, response);
         }
@@ -152,8 +155,18 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
         return loggedIn;
     }
 
-    boolean tryLogin(final ServletRequest request,
-                                     final ServletResponse response) throws Exception {
+    /**
+     * Maybe these negotiations should be done later/elsewhere, perhaps in
+     * {@link com.danrollo.negotiate.waffle.NegotiateAuthenticationRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken) NegotiateAuthenticationRealm.doGetAuthenticationInfo()}?
+     * However, that would require duplication of a lot of logic that currently exists in the Waffle tomcat filter:
+     * {@link waffle.servlet.NegotiateSecurityFilter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) NegotiateSecurityFilter.doFilter()}.
+     *
+     * @param request from javax.servlet
+     * @param response from javax.servlet
+     * @return true if login succeeded
+     * @throws Exception when something broke
+     */
+    private boolean tryLogin(final ServletRequest request, final ServletResponse response) throws Exception {
 
         boolean loggedIn = false; // false by default or we wouldn't be in
 

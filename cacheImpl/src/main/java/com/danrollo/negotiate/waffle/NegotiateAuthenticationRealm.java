@@ -94,7 +94,8 @@ public class NegotiateAuthenticationRealm extends AuthorizingRealm {
         final NegotiateToken token = (NegotiateToken) t;
         Configuration.setConfiguration(configuration);
 
-        // @todo replace below with call to validate/login windows token (via provider?)
+        // replace below with call to validate/login windows token (via provider?)
+        // @todo Maybe negotiations should be done here instead of earlier in NegotiateAuthenticationFilter.onAccessDenied()? see: javadoc for NegotiateAuthenticationFilter.tryLogin()
 /*
         final byte[] inToken = token.getIn();
         try {

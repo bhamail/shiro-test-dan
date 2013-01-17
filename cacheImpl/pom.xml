@@ -41,7 +41,9 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
+            <!-- Shouldn't this be 'provided' scope? When it is, IDEA doesn't see servlet classes as matching those in other library APIs (like: javax.servlet.ServletRequest).
             <scope>provided</scope>
+            -->
         </dependency>
 
         <dependency>
