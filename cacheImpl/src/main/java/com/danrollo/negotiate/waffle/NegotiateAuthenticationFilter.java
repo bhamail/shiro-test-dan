@@ -44,12 +44,12 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
     private static final String PRINCIPAL_SESSION_KEY = NegotiateSecurityFilter.class
             .getName() + ".PRINCIPAL";
 
-    private final NegotiateSecurityFilter negotiateFilter;
+    private final NegotiateSecurityFilter waffleNegotiateFilter;
 
 
     public NegotiateAuthenticationFilter() {
         //negotiate = new NegotiateSecurityFilterProvider(new WindowsAuthProviderImpl());
-        negotiateFilter = new NegotiateSecurityFilter();
+        waffleNegotiateFilter = new NegotiateSecurityFilter();
     }
 
     /**
@@ -65,7 +65,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
      */
     @Override
     protected void onFilterConfigSet() throws Exception {
-        negotiateFilter.init(getFilterConfig());
+        waffleNegotiateFilter.init(getFilterConfig());
     }
 
 
@@ -172,8 +172,8 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
 
 
         // @todo find a better place/call to do "init" suff
-        if (negotiateFilter.getProviders() == null) {
-            negotiateFilter.init(getFilterConfig());
+        if (waffleNegotiateFilter.getProviders() == null) {
+            waffleNegotiateFilter.init(getFilterConfig());
         }
 
         // @todo reuse as much as possible of NegotiateSecurityFilter.doFilterPrincipal(), and/or call isAccessAllowed() instead
@@ -187,7 +187,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
         }
 
         final SignalFilterChain signalFilterChain = new SignalFilterChain();
-        negotiateFilter.doFilter(request, response, signalFilterChain);
+        waffleNegotiateFilter.doFilter(request, response, signalFilterChain);
 
 
         final org.apache.shiro.subject.Subject currentUser = SecurityUtils.getSubject();
