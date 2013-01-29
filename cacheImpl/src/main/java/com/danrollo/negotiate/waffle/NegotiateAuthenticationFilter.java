@@ -18,10 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.util.Initializable;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 import waffle.servlet.NegotiateSecurityFilter;
@@ -37,7 +39,9 @@ import java.io.IOException;
  * @author Tarjei Skorgenes
  * @since 1.0.0
  */
-public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
+public class NegotiateAuthenticationFilter extends AuthenticatingFilter
+        implements Initializable
+{
 
 
     /** copied from NegotiateSecurityFilter. */
@@ -50,6 +54,23 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter {
     public NegotiateAuthenticationFilter() {
         //negotiate = new NegotiateSecurityFilterProvider(new WindowsAuthProviderImpl());
         waffleNegotiateFilter = new NegotiateSecurityFilter();
+    }
+
+
+    /**
+     * Initializes this object.
+     *
+     * @throws org.apache.shiro.ShiroException
+     *          if an exception occurs during initialization.
+     */
+    @Override
+    public void init() throws ShiroException {
+        // @todo this is never called. Seems Initializable.init() should be called for Filter sub class at some point.
+        try {
+            waffleNegotiateFilter.init(getFilterConfig());
+        } catch (ServletException e) {
+            throw new ShiroException(e);
+        }
     }
 
     /**
