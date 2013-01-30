@@ -8,21 +8,19 @@ package com.danrollo.negotiate.waffle;
  * Date: 1/15/13
  * Time: 10:45 PM
  */
-import javax.security.auth.Subject;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Initializable;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
@@ -114,20 +112,25 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         return negotiateToken;
     }
 
+
+    @Override
     protected boolean onLoginSuccess(AuthenticationToken token,
                                      Subject subject, ServletRequest request, ServletResponse response)
             throws Exception {
-        NegotiateToken t = (NegotiateToken) token;
-/*
-        byte[] out = t.getOut();
-        if (out != null && out.length > 0) {
-            sendAuthenticateHeader(out, WebUtils.toHttp(response));
-        }
-*/
-        request.setAttribute("MY_SUBJECT", t.getSubject());
+
+//        NegotiateToken t = (NegotiateToken) token;
+
+//        byte[] out = t.getOut();
+//        if (out != null && out.length > 0) {
+//            sendAuthenticateHeader(out, WebUtils.toHttp(response));
+//        }
+
+//        request.setAttribute("MY_SUBJECT", t.getSubject());
         return true;
     }
 
+/*
+    @Override
     protected boolean onLoginFailure(final AuthenticationToken token,
                                      final AuthenticationException e, final ServletRequest request,
                                      final ServletResponse response) {
@@ -135,32 +138,22 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         sendChallenge(request, response, t.getOut());
         return false;
     }
+//*/
 
 
 
     /**
      * Used for stub filterChain to know when waffle filter made a call to FilterChain.doFilter().
      */
-    final class SignalFilterChain implements FilterChain {
-        private boolean wasDoFilterCalled;
-        private ServletRequest lastRequest;
+    private final class SignalFilterChain implements FilterChain {
 
         @Override
         public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
-            wasDoFilterCalled = true;
-            lastRequest = request;
         }
 
-        boolean wasDoFilterCalled() {
-            return wasDoFilterCalled;
-        }
-
-        ServletRequest getLastRequest() {
-            return lastRequest;
-        }
     }
 
-
+    @Override
     protected boolean onAccessDenied(final ServletRequest request,
                                      final ServletResponse response) throws Exception {
         boolean loggedIn = false; // false by default or we wouldn't be in
@@ -189,9 +182,6 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
      */
     private boolean tryLogin(final ServletRequest request, final ServletResponse response) throws Exception {
 
-        boolean loggedIn = false; // false by default or we wouldn't be in
-
-
         // @todo find a better place/call to do "init" suff
         if (waffleNegotiateFilter.getProviders() == null) {
             waffleNegotiateFilter.init(getFilterConfig());
@@ -212,16 +202,12 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
 
 
         final org.apache.shiro.subject.Subject currentUser = SecurityUtils.getSubject();
-/*
-        if (!currentUser.isAuthenticated()) {
-            return false;
-        }
-*/
-        //final HttpSession session = ((HttpServletRequest)request).getSession(false);
+
         final Session session = currentUser.getSession(false);
         if (session == null) {
             return false;
         }
+
         final javax.security.auth.Subject subject
                 = (javax.security.auth.Subject) session.getAttribute("javax.security.auth.subject");
         if (subject == null) {
@@ -230,27 +216,6 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         return true;
     }
 
-    /**
-     * Determines whether the incoming request is an attempt to log in.
-     * <p/>
-     * The default implementation obtains the value of the request's
-     * {@link #AUTHORIZATION_HEADER AUTHORIZATION_HEADER}, and if it is not
-     * <code>null</code>, delegates to {@link #isLoginAttempt(String)
-     * isLoginAttempt(authzHeaderValue)}. If the header is <code>null</code>,
-     * <code>false</code> is returned.
-     *
-     * @param request
-     *            incoming ServletRequest
-     * @param response
-     *            outgoing ServletResponse
-     * @return true if the incoming request is an attempt to log in based, false
-     *         otherwise
-     */
-    protected boolean isLoginAttempt(final ServletRequest request,
-                                     final ServletResponse response) {
-        final String authzHeader = getAuthzHeader(request);
-        return authzHeader != null && isLoginAttempt(authzHeader);
-    }
 
     /**
      * Returns the {@link #AUTHORIZATION_HEADER AUTHORIZATION_HEADER} from the
@@ -266,69 +231,9 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
      *            the incoming <code>ServletRequest</code>
      * @return the <code>Authorization</code> header's value.
      */
-    protected String getAuthzHeader(final ServletRequest request) {
+    String getAuthzHeader(final ServletRequest request) {
         final HttpServletRequest httpRequest = WebUtils.toHttp(request);
         return httpRequest.getHeader("Authorization");
-    }
-
-    /**
-     * Default implementation that returns <code>true</code> if the specified
-     * <code>authzHeader</code> starts with the same (case-insensitive)
-     * characters specified by the {@link #getAuthzScheme() authzScheme},
-     * <code>false</code> otherwise.
-     * <p/>
-     * That is:
-     * <p/>
-     * <code>String authzScheme = getAuthzScheme().toLowerCase();<br/>
-     * return authzHeader.toLowerCase().startsWith(authzScheme);</code>
-     *
-     * @param authzHeader
-     *            the 'Authorization' header value (guaranteed to be non-null if
-     *            the
-     *            {@link #isLoginAttempt(javax.servlet.ServletRequest, javax.servlet.ServletResponse)}
-     *            method is not overriden).
-     * @return <code>true</code> if the authzHeader value matches that
-     *         configured as defined by the {@link #getAuthzScheme()
-     *         authzScheme}.
-     */
-    protected boolean isLoginAttempt(final String authzHeader) {
-        final String authzScheme = "Negotiate".toLowerCase();
-        return authzHeader.toLowerCase().startsWith(authzScheme);
-    }
-
-    /**
-     * Builds the challenge for authorization by setting a HTTP <code>401</code>
-     * (Unauthorized) status as well as the response's
-     * {@link #AUTHENTICATE_HEADER AUTHENTICATE_HEADER}.
-     * <p/>
-     * The header value constructed is equal to:
-     * <p/>
-     * <code>{@link #getAuthcScheme() getAuthcScheme()} + " realm=\"" + {@link #getApplicationName() getApplicationName()} + "\"";</code>
-     *
-     * @param request
-     *            incoming ServletRequest, ignored by this implementation
-     * @param response
-     *            outgoing ServletResponse
-     * @param out
-     * @return false - this sends the challenge to be sent back
-     */
-
-    protected boolean sendChallenge(final ServletRequest request,
-                                    final ServletResponse response, final byte[] out) {
-        final HttpServletResponse httpResponse = WebUtils.toHttp(response);
-        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        sendAuthenticateHeader(out, httpResponse);
-        return false;
-    }
-
-    private void sendAuthenticateHeader(final byte[] out,
-                                        final HttpServletResponse httpResponse) {
-        if (out == null || out.length == 0) {
-            httpResponse.setHeader("WWW-Authenticate", "Negotiate");
-        } else {
-            httpResponse.setHeader("WWW-Authenticate", "Negotiate "
-                    + Base64.encodeToString(out));
-        }
     }
 
 }

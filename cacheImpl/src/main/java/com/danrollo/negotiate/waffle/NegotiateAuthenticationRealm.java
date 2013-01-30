@@ -40,47 +40,12 @@ import waffle.windows.auth.impl.WindowsAuthProviderImpl;
 
 @SuppressWarnings("restriction")
 public class NegotiateAuthenticationRealm extends AuthorizingRealm {
-    public static final String ROLE = "NegotiateAuthenticationRealm";
-
-    private static final String SPNEGO_OID = "1.3.6.1.5.5.2";
-
-    private String hostName;
-
-    private Configuration configuration;
-
-
-
-
-    /** copied from NegotiateSecurityFilter. */
-    private static final String PRINCIPAL_SESSION_KEY = NegotiateSecurityFilter.class
-            .getName() + ".PRINCIPAL";
 
     private final IWindowsAuthProvider windowsAuthProvider;
-    private final NegotiateSecurityFilterProvider negotiateProvider;
 
     public NegotiateAuthenticationRealm() {
         windowsAuthProvider = new WindowsAuthProviderImpl();
-        negotiateProvider = new NegotiateSecurityFilterProvider(windowsAuthProvider);
     }
-
-//    /**
-//     * Template method to be overridden by subclasses to perform initialization logic at start-up.  The
-//     * {@code ServletContext} and {@code FilterConfig} will be accessible
-//     * (and non-{@code null}) at the time this method is invoked via the
-//     * {@link #getServletContext() getServletContext()} and {@link #getFilterConfig() getFilterConfig()}
-//     * methods respectively.
-//     * <p/>
-//     * {@code init-param} values may be conveniently obtained via the {@link #getInitParam(String)} method.
-//     *
-//     * @throws Exception if the subclass has an error upon initialization.
-//     */
-//    @Override
-//    protected void onInit() throws Exception {
-//        super.onInit();
-//        negotiateFilter.init(getFilterConfig());
-//    }
-
-
 
 
     @Override
@@ -91,8 +56,9 @@ public class NegotiateAuthenticationRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(
             final AuthenticationToken t) throws AuthenticationException {
+
         final NegotiateToken token = (NegotiateToken) t;
-        Configuration.setConfiguration(configuration);
+//        Configuration.setConfiguration(configuration);
 
         // replace below with call to validate/login windows token (via provider?)
         // @todo Maybe negotiations should be done here instead of earlier in NegotiateAuthenticationFilter.onAccessDenied()? see: javadoc for NegotiateAuthenticationFilter.tryLogin()
@@ -134,86 +100,5 @@ public class NegotiateAuthenticationRealm extends AuthorizingRealm {
             final PrincipalCollection principals) {
         return null;
     }
-
-    private Subject createSubject(final GSSContext context) throws GSSException {
-        return GSSUtil.createSubject(context.getSrcName(),
-                getDelegatedCredentials(context));
-    }
-
-    private GSSCredential getDelegatedCredentials(final GSSContext context)
-            throws GSSException {
-        if (context.getCredDelegState()) {
-            return context.getDelegCred();
-        }
-
-        return null;
-    }
-
-    private GSSContext createContext() throws GSSException {
-        final GSSManager manager = GSSManager.getInstance();
-        final GSSName name = manager.createName("HTTP@" + getHostName(),
-                GSSName.NT_HOSTBASED_SERVICE);
-        final GSSCredential serverCreds = manager.createCredential(name,
-                GSSCredential.DEFAULT_LIFETIME, new Oid(SPNEGO_OID),
-                GSSCredential.ACCEPT_ONLY);
-        return manager.createContext(serverCreds);
-    }
-
-    private String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(final String hostName) {
-        this.hostName = hostName;
-    }
-
-    public void setConfiguration(final Configuration configuration) {
-        this.configuration = configuration;
-    }
-
-
-//    boolean tryLogin(final ServletRequest request,
-//                     final ServletResponse response) throws Exception {
-//
-//        boolean loggedIn = false; // false by default or we wouldn't be in
-//
-//
-//        // @todo find a better place/call to do "init" suff
-//        if (negotiateFilter.getProviders() == null) {
-//            negotiateFilter.init(getFilterConfig());
-//        }
-//
-//        // @todo reuse as much as possible of NegotiateSecurityFilter.doFilterPrincipal(), and/or call isAccessAllowed() instead
-//        final HttpSession existingSession = ((HttpServletRequest)request).getSession(false);
-//        if (existingSession != null) {
-//            final WindowsPrincipal windowsPrincipal = (WindowsPrincipal) existingSession.getAttribute(PRINCIPAL_SESSION_KEY);
-//            if (windowsPrincipal != null) {
-//                // we already authenticated...
-//                return true;
-//            }
-//        }
-//
-//        final SignalFilterChain signalFilterChain = new SignalFilterChain();
-//        negotiateFilter.doFilter(request, response, signalFilterChain);
-//
-//
-//        final org.apache.shiro.subject.Subject currentUser = SecurityUtils.getSubject();
-///*
-//        if (!currentUser.isAuthenticated()) {
-//            return false;
-//        }
-//*/
-//        //final HttpSession session = ((HttpServletRequest)request).getSession(false);
-//        final Session session = currentUser.getSession(false);
-//        if (session == null) {
-//            return false;
-//        }
-//        final javax.security.auth.Subject subject
-//                = (javax.security.auth.Subject) session.getAttribute("javax.security.auth.subject");
-//        if (subject == null) {
-//            return false;
-//        }
-//        return true;
-//    }
 
 }

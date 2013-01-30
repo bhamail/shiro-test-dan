@@ -1,8 +1,9 @@
 package com.danrollo.negotiate.waffle;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dan
+ * Derived from net.skorgenes.security.jsecurity.negotiate.NegotiateAuthenticationFilter.
+ *
+ * @author Dan Rollo
  * Date: 1/16/13
  * Time: 12:25 AM
  * To change this template use File | Settings | File Templates.
