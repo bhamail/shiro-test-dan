@@ -4,14 +4,16 @@
 <body>
 <h2>Hello World!</h2>
 
-<h1>Hello principal: <shiro:principal />, user: <shiro:user />. </h1>
-<a href="logout">Logout</a>
+<h1>
+<%--Hello principal: <shiro:principal />, user: <shiro:user />. --%>
+<%--<a href="logout">Logout</a><br>--%>
 
-<br>
 remote user <b><%= request.getRemoteUser() %></b>
-, principal name: <b><%= request.getUserPrincipal().getName() %></b>
-, Subject: <b><%= request.getSession().getAttribute("javax.security.auth.subject") %></b>
-in session <b><%= session.getId() %></b>.<br>
+<%--, principal name: <b><%= request.getUserPrincipal().getName() %></b>--%>
+<%--, Subject: <b><%= request.getSession().getAttribute("javax.security.auth.subject") %></b>--%>
+<br>in session <b><%= session.getId() %></b>.<br>
+
+</h1>
 
 </body>
 </html>
