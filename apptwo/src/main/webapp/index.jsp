@@ -8,5 +8,7 @@
 </h1>
 <%--<a href="logout">Logout</a>--%>
 
+<br>in session <b><%= session.getId() %></b>.<br>
+
 </body>
 </html>
