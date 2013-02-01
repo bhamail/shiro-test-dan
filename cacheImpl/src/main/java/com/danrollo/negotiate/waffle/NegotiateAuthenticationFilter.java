@@ -9,6 +9,8 @@ package com.danrollo.negotiate.waffle;
  * Time: 10:45 PM
  */
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -28,6 +30,9 @@ import waffle.servlet.NegotiateSecurityFilter;
 import waffle.servlet.WindowsPrincipal;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 
 /**
  * A authentication filter that implements the HTTP Negotiate mechanism. The
@@ -48,6 +53,9 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
 
     private final NegotiateSecurityFilter waffleNegotiateFilter;
 
+    /** A space delimited list of waffle security filter provider names. */
+    private String securityFilterProviders;
+
 
     public NegotiateAuthenticationFilter() {
         //negotiate = new NegotiateSecurityFilterProvider(new WindowsAuthProviderImpl());
@@ -65,7 +73,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
     public void init() throws ShiroException {
         // @todo this is never called. Seems Initializable.init() should be called for Filter sub class at some point.
         try {
-            waffleNegotiateFilter.init(getFilterConfig());
+            doWaffleFilterInit();
         } catch (ServletException e) {
             throw new ShiroException(e);
         }
@@ -84,9 +92,41 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
      */
     @Override
     protected void onFilterConfigSet() throws Exception {
-        waffleNegotiateFilter.init(getFilterConfig());
+        doWaffleFilterInit();
     }
 
+    private void doWaffleFilterInit() throws ServletException {
+
+        final FilterConfig filterConfig;
+        if (getFilterConfig() != null) {
+            // @todo test this, make sure ini config is reflected in filterConfig
+            filterConfig =  getFilterConfig();
+        } else if (securityFilterProviders != null) {
+            filterConfig = new FilterConfig() {
+                @Override
+                public String getFilterName() { return null; }
+
+                @Override
+                public ServletContext getServletContext() { return null; }
+
+                @Override
+                public String getInitParameter(String name) {
+                    if ("securityFilterProviders".equals(name)) {
+                        return securityFilterProviders;
+                    }
+                    return null;
+                }
+
+                @Override
+                public Enumeration getInitParameterNames() {
+                    return Collections.enumeration(Arrays.asList("securityFilterProviders"));
+                }
+            };
+        } else {
+            filterConfig = null;
+        }
+        waffleNegotiateFilter.init(filterConfig);
+    }
 
 
     @Override
@@ -184,7 +224,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
 
         // @todo find a better place/call to do "init" suff
         if (waffleNegotiateFilter.getProviders() == null) {
-            waffleNegotiateFilter.init(getFilterConfig());
+            doWaffleFilterInit();
         }
 
         // @todo reuse as much as possible of NegotiateSecurityFilter.doFilterPrincipal(), and/or call isAccessAllowed() instead
@@ -199,7 +239,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
 
         final SignalFilterChain signalFilterChain = new SignalFilterChain();
         waffleNegotiateFilter.doFilter(request, response, signalFilterChain);
-
+        // @todo Dectect error condition and throw exception?
 
         final org.apache.shiro.subject.Subject currentUser = SecurityUtils.getSubject();
 
@@ -236,4 +276,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         return httpRequest.getHeader("Authorization");
     }
 
+    public void setSecurityFilterProviders(final String providerNames) {
+        securityFilterProviders = providerNames;
+    }
 }
