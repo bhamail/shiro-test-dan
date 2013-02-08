@@ -108,7 +108,6 @@
                     Note: To remote debug tomcat on port 8000, use: bin/catalina.sh jpda start
                     -->
                     <server>mylocalserver</server>
-                    <url>http://jhite-red.nycapt35k.com:8080/manager/</url>
                 </configuration>
             </plugin>
 
