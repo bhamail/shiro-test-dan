@@ -33,11 +33,20 @@ public class NegotiateToken implements AuthenticationToken {
 
     private Object principal;
 
+    private final String connectionId;
+    private final String securityPackage;
 
-    public NegotiateToken(final byte[] in, final byte[] out) {
+
+    public NegotiateToken(final byte[] in, final byte[] out,
+                          final String connectionId, final String securityPackage) {
         this.in = in;
         this.out = out;
+        this.connectionId = connectionId;
+        this.securityPackage = securityPackage;
     }
+
+    public String getConnectionId() { return connectionId; }
+    public String getSecurityPackage() { return securityPackage; }
 
     public Object getCredentials() {
         return subject;
