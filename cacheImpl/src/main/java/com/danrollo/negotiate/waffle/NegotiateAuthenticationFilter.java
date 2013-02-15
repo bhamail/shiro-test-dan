@@ -48,7 +48,10 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
     private final List<String> protocols = new ArrayList<String>();
     {
         protocols.add("Negotiate");
-        //protocols.add("NTLM"); //@todo figure out why things (sometimes) break when adding NTLM protocol
+        protocols.add("NTLM"); //@todo figure out why things (sometimes) break when adding NTLM protocol, might be
+                               // related to setSPN and running tomcat server as NT Service account vs. as normal user account.
+                               // http://waffle.codeplex.com/discussions/254748
+                               // setspn -A HTTP/<server-fqdn> <user_tomcat_running_under>
     }
 
 
@@ -78,11 +81,13 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
             throws Exception {
 
         final NegotiateToken t = (NegotiateToken) token;
+/*
         final byte[] out = t.getOut();
         if (out != null && out.length > 0) {
-            log.warn("non-empty token.out in onLoginSuccess");
-            sendAuthenticateHeader(out, WebUtils.toHttp(response));
+            log.debug("non-empty token.out in onLoginSuccess. out.length: " + out.length);
+            //sendAuthenticateHeader(out, WebUtils.toHttp(response)); // why would we send this here?
         }
+*/
         request.setAttribute("MY_SUBJECT", t.getSubject());
         return true;
     }

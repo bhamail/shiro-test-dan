@@ -20,6 +20,6 @@ public final class NegotiateAuthenticationFilterTest extends TestCase {
     public void testIsLoginAttempt()  {
         assertFalse(negAuthFilter.isLoginAttempt(""));
         assertTrue(negAuthFilter.isLoginAttempt("NEGOTIATe"));
-        //assertTrue(negAuthFilter.isLoginAttempt("ntlm"));
+        assertTrue(negAuthFilter.isLoginAttempt("ntlm"));
     }
 }
