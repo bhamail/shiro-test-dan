@@ -12,7 +12,6 @@ import javax.security.auth.Subject;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import waffle.servlet.WindowsPrincipal;
 
 
 /**
@@ -35,18 +34,20 @@ public class NegotiateToken implements AuthenticationToken {
 
     private final String connectionId;
     private final String securityPackage;
-
+    private final boolean ntlmPost;
 
     public NegotiateToken(final byte[] in, final byte[] out,
-                          final String connectionId, final String securityPackage) {
+                          final String connectionId, final String securityPackage, final boolean ntlmPost) {
         this.in = in;
         this.out = out;
         this.connectionId = connectionId;
         this.securityPackage = securityPackage;
+        this.ntlmPost = ntlmPost;
     }
 
     public String getConnectionId() { return connectionId; }
     public String getSecurityPackage() { return securityPackage; }
+    public boolean isNtlmPost() { return ntlmPost; }
 
     public Object getCredentials() {
         return subject;
