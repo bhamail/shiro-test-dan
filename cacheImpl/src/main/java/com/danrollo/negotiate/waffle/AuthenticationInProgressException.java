@@ -10,7 +10,7 @@ package com.danrollo.negotiate.waffle;
 import org.apache.shiro.authc.AuthenticationException;
 
 /**
- * Thrown when the GSSAPI-context is being established and requires an extra
+ * Thrown when the negotiate authentication is being established and requires an extra
  * roundtrip to the client.
  *
  * @author Dan Rollo
