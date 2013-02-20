@@ -30,10 +30,9 @@ import java.util.List;
 
 /**
  * A authentication filter that implements the HTTP Negotiate mechanism. The
- * user is authenticated using his Kerberos credentials, providing
- * single-sign-on
+ * current user is authenticated, providing single-sign-on
  *
- * @author Tarjei Skorgenes
+ * @author Dan Rollo
  * @since 1.0.0
  */
 public class NegotiateAuthenticationFilter extends AuthenticatingFilter
@@ -48,7 +47,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
     private final List<String> protocols = new ArrayList<String>();
     {
         protocols.add("Negotiate");
-        protocols.add("NTLM"); //@todo figure out why things (sometimes) break when adding NTLM protocol, might be
+        protocols.add("NTLM"); //@todo things (sometimes) break, depending on what user account is running tomcat:
                                // related to setSPN and running tomcat server as NT Service account vs. as normal user account.
                                // http://waffle.codeplex.com/discussions/254748
                                // setspn -A HTTP/<server-fqdn> <user_tomcat_running_under>
@@ -81,13 +80,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
             throws Exception {
 
         final NegotiateToken t = (NegotiateToken) token;
-/*
-        final byte[] out = t.getOut();
-        if (out != null && out.length > 0) {
-            log.debug("non-empty token.out in onLoginSuccess. out.length: " + out.length);
-            //sendAuthenticateHeader(out, WebUtils.toHttp(response)); // why would we send this here?
-        }
-*/
+
         request.setAttribute("MY_SUBJECT", t.getSubject());
         return true;
     }
@@ -179,22 +172,15 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
     /**
      * Default implementation that returns <code>true</code> if the specified
      * <code>authzHeader</code> starts with the same (case-insensitive)
-     * characters specified by the {@link org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter#getAuthzScheme() authzScheme},
+     * characters specified by any of the configured protocols (Negotiate or NTLM),
      * <code>false</code> otherwise.
-     * <p/>
-     * That is:
-     * <p/>
-     * <code>String authzScheme = getAuthzScheme().toLowerCase();<br/>
-     * return authzHeader.toLowerCase().startsWith(authzScheme);</code>
      *
      * @param authzHeader
      *            the 'Authorization' header value (guaranteed to be non-null if
      *            the
      *            {@link #isLoginAttempt(javax.servlet.ServletRequest)}
      *            method is not overriden).
-     * @return <code>true</code> if the authzHeader value matches that
-     *         configured as defined by the {@link org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter#getAuthzScheme()
-     *         authzScheme}.
+     * @return <code>true</code> if the authzHeader value matches any of the configured protocols (Negotiate or NTLM).
      */
     boolean isLoginAttempt(final String authzHeader) {
         for (final String protocol : protocols) {
@@ -209,10 +195,6 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
      * Builds the challenge for authorization by setting a HTTP <code>401</code>
      * (Unauthorized) status as well as the response's
      * {@link org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter#AUTHENTICATE_HEADER AUTHENTICATE_HEADER}.
-     * <p/>
-     * The header value constructed is equal to:
-     * <p/>
-     * <code>{@link org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter#getAuthcScheme() getAuthcScheme()} + " realm=\"" + {@link org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter#getApplicationName() getApplicationName()} + "\"";</code>
      *
      * @param response
      *            outgoing ServletResponse

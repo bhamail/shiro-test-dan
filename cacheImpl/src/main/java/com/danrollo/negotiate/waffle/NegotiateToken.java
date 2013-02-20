@@ -15,9 +15,9 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 
 /**
- * An authentication token wrapping a GSSAPI Negotiate token.
+ * An authentication token wrapping a Waffle Negotiate token.
  *
- * @author Tarjei Skorgenes
+ * @author Dan Rollo
  * @since 1.0.0
  */
 public class NegotiateToken implements AuthenticationToken {

@@ -9,7 +9,6 @@ package com.danrollo.negotiate.waffle;
  * Time: 11:00 PM
  */
 import javax.security.auth.Subject;
-import javax.security.auth.kerberos.KerberosPrincipal;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -18,11 +17,9 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 /**
  * Information about a user authenticated via the HTTP Negotiate authentication
  * mechanism.
- * <p>
- * The object provides access to the JAAS {@link Subject} containing the user's
- * principal and (if available) forwarded Kerberos TGT.
+
  *
- * @author Tarjei Skorgenes
+ * @author Dan Rollo
  * @since 1.0.0
  */
 public class NegotiateInfo implements AuthenticationInfo{
@@ -36,11 +33,9 @@ public class NegotiateInfo implements AuthenticationInfo{
      * Creates a new info object.
      *
      * @param subject
-     *            a JAAS subject containing the authenticated users
-     *            {@link KerberosPrincipal} and (if forwarded) TGT
+     *            a subject containing the authenticated users {@link waffle.servlet.WindowsPrincipal}.
      * @param realmName
-     *            a <code>String</code> containing the name of the
-     *            authentication realm
+     *            a <code>String</code> containing the name of the authentication realm
      */
     public NegotiateInfo(final Subject subject, final String realmName) {
         this.subject = subject;
@@ -48,11 +43,9 @@ public class NegotiateInfo implements AuthenticationInfo{
     }
 
     /**
-     * Creates a new principal collection using the JAAS subject as the
-     * principal.
+     * Creates a new principal collection using the subject as the principal.
      *
-     * @return a new principal collection using the JAAS subject as the
-     *         principal
+     * @return a new principal collection using the subject as the principal
      */
     @Override
     public PrincipalCollection getPrincipals() {
@@ -60,9 +53,9 @@ public class NegotiateInfo implements AuthenticationInfo{
     }
 
     /**
-     * Returns the JAAS subject.
+     * Returns the subject.
      *
-     * @return the JAAS subject
+     * @return the subject
      */
     @Override
     public Object getCredentials() {
