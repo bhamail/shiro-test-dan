@@ -13,9 +13,7 @@ import javax.security.auth.Subject;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.realm.AuthenticatingRealm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +26,7 @@ import waffle.windows.auth.impl.WindowsAuthProviderImpl;
 
 import java.security.Principal;
 
-@SuppressWarnings("restriction")
-public class NegotiateAuthenticationRealm extends AuthorizingRealm {
+public class NegotiateAuthenticationRealm extends AuthenticatingRealm {
 
     /**
      * This class's private logger.
@@ -97,11 +94,4 @@ public class NegotiateAuthenticationRealm extends AuthorizingRealm {
 
         return token.createInfo();
     }
-
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(
-            final PrincipalCollection principals) {
-        return null;
-    }
-
 }
