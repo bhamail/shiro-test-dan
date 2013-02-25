@@ -56,7 +56,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
 
     @Override
     protected AuthenticationToken createToken(final ServletRequest in,
-                                              final ServletResponse out) throws Exception {
+                                              final ServletResponse out)  {
         final String authorization = getAuthzHeader(in);
         final String[] elements = authorization.split(" ");
         final byte[] inToken = Base64.decode(elements[1]);
