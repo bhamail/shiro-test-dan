@@ -15,12 +15,13 @@
         <module>cacheImpl</module>
         <module>appone</module>
         <module>apptwo</module>
-        <module>waffleFilterTest</module>
+        <!--<module>waffleFilterTest</module>-->
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <waffle.version>1.6-SNAPSHOT</waffle.version>
         <shiro.version>1.2.1</shiro.version>
         <ehcache.version>2.5.2</ehcache.version>
 

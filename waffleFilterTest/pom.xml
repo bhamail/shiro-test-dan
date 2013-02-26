@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.github.dblock.waffle</groupId>
             <artifactId>waffle-tomcat6</artifactId>
-            <version>1.5</version>
+            <version>${waffle.version}</version>
         </dependency>
 
         <dependency>
