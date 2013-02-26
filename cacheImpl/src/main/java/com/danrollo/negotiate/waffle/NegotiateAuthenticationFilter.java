@@ -93,22 +93,14 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
 
         if (e instanceof AuthenticationInProgressException) {
             // negotiate is processing
-            sendChallenge(response, t.getOut());
+            final String protocol = getAuthzHeaderProtocol(request);
+            log.debug("Negotiation in progress for protocol: " + protocol);
+            sendChallengeDuringNegotiate(protocol, response, t.getOut());
         } else {
             log.warn("login exception: " + e.getMessage());
 
-            final HttpServletResponse httpResponse = WebUtils.toHttp(response);
-
             // do not send token.out bytes, this was a login failure.
-            sendUnauthorized(null, httpResponse);
-
-            httpResponse.setHeader("Connection", "close");
-            try {
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-                httpResponse.flushBuffer();
-            } catch (IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
+            sendChallengeOnFailure(response);
         }
         return false;
     }
@@ -123,8 +115,8 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
          if (isLoginAttempt(request)) {
              loggedIn = executeLogin(request, response);
          } else {
-             log.debug("authorization required");
-             sendChallenge(response, null);
+             log.debug("authorization required, supported protocols: " + protocols);
+             sendChallengeInitiateNegotiate(response);
          }
          return loggedIn;
     }
@@ -169,6 +161,11 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         return httpRequest.getHeader("Authorization");
     }
 
+    String getAuthzHeaderProtocol(final ServletRequest request) {
+        final String authzHeader = getAuthzHeader(request);
+        return authzHeader.substring(0, authzHeader.indexOf(" "));
+    }
+
     /**
      * Default implementation that returns <code>true</code> if the specified
      * <code>authzHeader</code> starts with the same (case-insensitive)
@@ -196,26 +193,52 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
      * (Unauthorized) status as well as the response's
      * {@link org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter#AUTHENTICATE_HEADER AUTHENTICATE_HEADER}.
      *
+     * @param protocols protocols for which to send a challenge. In initial cases, will be all supported protocols.
+     *                  In the midst of negotiation, will be only the protocol being negotiated.
+     *
      * @param response
      *            outgoing ServletResponse
      * @param out
      *            token.out or null
      */
-    void sendChallenge(final ServletResponse response, final byte[] out) {
+    private void sendChallenge(final List<String> protocols, final ServletResponse response, final byte[] out) {
         final HttpServletResponse httpResponse = WebUtils.toHttp(response);
-        sendAuthenticateHeader(out, httpResponse);
+        sendAuthenticateHeader(protocols, out, httpResponse);
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    private void sendAuthenticateHeader(final byte[] out,
+    void sendChallengeInitiateNegotiate(final ServletResponse response) {
+        sendChallenge(protocols, response, null);
+    }
+
+    void sendChallengeDuringNegotiate(final String protocol, final ServletResponse response, final byte[] out) {
+
+        final List<String> protocols = new ArrayList<String>();
+        protocols.add(protocol);
+        sendChallenge(protocols, response, out);
+    }
+
+    void sendChallengeOnFailure(final ServletResponse response) {
+        final HttpServletResponse httpResponse = WebUtils.toHttp(response);
+        sendUnauthorized(protocols, null, httpResponse);
+        httpResponse.setHeader("Connection", "close");
+        try {
+            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            httpResponse.flushBuffer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendAuthenticateHeader(final List<String> protocols, final byte[] out,
                                         final HttpServletResponse httpResponse) {
 
-        sendUnauthorized(out, httpResponse);
+        sendUnauthorized(protocols, out, httpResponse);
 
         httpResponse.setHeader("Connection", "keep-alive");
     }
 
-    private void sendUnauthorized(final byte[] out, final HttpServletResponse response) {
+    private void sendUnauthorized(final List<String> protocols, final byte[] out, final HttpServletResponse response) {
         for (final String protocol : protocols) {
             if (out == null || out.length == 0) {
                 response.addHeader("WWW-Authenticate", protocol);
