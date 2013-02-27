@@ -6,9 +6,10 @@
 <h1>2 Hello, remote user <b><%= request.getRemoteUser() %></b>
     <%--, principal: <shiro:principal />. --%>
 </h1>
-<%--<a href="logout">Logout</a>--%>
 
 <br>in session <b><%= session.getId() %></b>.<br>
+
+<a href="logout">Logout</a>
 
 </body>
 </html>
