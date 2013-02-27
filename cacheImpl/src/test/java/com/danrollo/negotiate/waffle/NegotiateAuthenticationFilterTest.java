@@ -177,14 +177,14 @@ public final class NegotiateAuthenticationFilterTest extends TestCase {
         @Override
         public void addDateHeader(String name, long date) { notImplemented(); }
 
-        Map<String, String> headers = new HashMap<String, String>();
+        final Map<String, String> headers = new HashMap<String, String>();
         @Override
         public void setHeader(String name, String value) {
             headers.put(name, value);
         }
 
 
-        Map<String, List<String>> headersAdded = new HashMap<String, List<String>>();
+        final Map<String, List<String>> headersAdded = new HashMap<String, List<String>>();
         @Override
         public void addHeader(String name, String value) {
             if (headersAdded.containsKey(name)) {

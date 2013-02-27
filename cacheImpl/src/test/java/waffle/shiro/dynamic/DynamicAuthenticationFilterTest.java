@@ -71,7 +71,7 @@ public class DynamicAuthenticationFilterTest extends TestCase {
         @Override
         public ServletInputStream getInputStream() throws IOException { notImplemented(); return null; }
 
-        Map<String, String> parameters = new HashMap<String, String>();
+        final Map<String, String> parameters = new HashMap<String, String>();
         @Override
         public String getParameter(String name) {
             return parameters.get(name);
