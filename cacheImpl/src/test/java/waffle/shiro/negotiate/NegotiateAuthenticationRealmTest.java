@@ -1,4 +1,4 @@
-package com.danrollo.negotiate.waffle;
+package waffle.shiro.negotiate;
 
 import junit.framework.TestCase;
 import org.apache.shiro.authc.AuthenticationToken;

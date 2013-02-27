@@ -1,4 +1,4 @@
-package com.danrollo.negotiate.waffle;
+package waffle.shiro.negotiate;
 
 /**
  * Derived from net.skorgenes.security.jsecurity.negotiate.NegotiateAuthenticationFilter.
@@ -50,7 +50,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         protocols.add("Negotiate");
         protocols.add("NTLM"); //@todo things (sometimes) break, depending on what user account is running tomcat:
                                // related to setSPN and running tomcat server as NT Service account vs. as normal user account.
-                               // http://waffle.codeplex.com/discussions/254748
+                               // http://negotiate.codeplex.com/discussions/254748
                                // setspn -A HTTP/<server-fqdn> <user_tomcat_running_under>
     }
 
@@ -91,10 +91,10 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         final byte[] inToken = Base64.decode(elements[1]);
 
         // maintain a connection-based session for NTLM tokns
-        final String connectionId = NtlmServletRequest.getConnectionId((HttpServletRequest)request); // @todo see about changing this parameter to ServletRequest in waffle
+        final String connectionId = NtlmServletRequest.getConnectionId((HttpServletRequest)request); // @todo see about changing this parameter to ServletRequest in negotiate
         final String securityPackage = elements[0];
 
-        final AuthorizationHeader authorizationHeader = new AuthorizationHeader((HttpServletRequest)request); // @todo see about changing this parameter to ServletRequest in waffle
+        final AuthorizationHeader authorizationHeader = new AuthorizationHeader((HttpServletRequest)request); // @todo see about changing this parameter to ServletRequest in negotiate
         final boolean ntlmPost = authorizationHeader.isNtlmType1PostAuthorizationHeader();
 
         log.debug("security package: " + securityPackage + ", connection id: " + connectionId + ", ntlmPost: " + ntlmPost);

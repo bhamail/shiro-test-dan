@@ -1,7 +1,7 @@
 package waffle.shiro.dynamic;
 
-import com.danrollo.negotiate.waffle.AuthenticationInProgressException;
-import com.danrollo.negotiate.waffle.NegotiateAuthenticationRealm;
+import waffle.shiro.negotiate.AuthenticationInProgressException;
+import waffle.shiro.negotiate.NegotiateAuthenticationRealm;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

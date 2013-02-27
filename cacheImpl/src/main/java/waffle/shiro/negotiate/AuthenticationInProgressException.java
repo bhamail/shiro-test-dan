@@ -1,4 +1,4 @@
-package com.danrollo.negotiate.waffle;
+package waffle.shiro.negotiate;
 
 /**
  * Derived from net.skorgenes.security.jsecurity.negotiate.NegotiateAuthenticationFilter.

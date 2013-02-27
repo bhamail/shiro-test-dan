@@ -1,6 +1,6 @@
 package waffle.shiro.dynamic;
 
-import com.danrollo.negotiate.waffle.NegotiateAuthenticationFilter;
+import waffle.shiro.negotiate.NegotiateAuthenticationFilter;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
