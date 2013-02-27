@@ -62,8 +62,8 @@ public class DynamicAuthenticationFilter extends FormAuthenticationFilter {
         }
 
         @Override
-        protected boolean onLoginSuccess(AuthenticationToken token, Subject subject,
-                                         ServletRequest request, ServletResponse response) throws Exception {
+        protected boolean onLoginSuccess(final AuthenticationToken token, final Subject subject,
+                                         final ServletRequest request, final ServletResponse response) throws Exception {
             return parent.onLoginSuccess(token, subject, request, response);
         }
     }
@@ -72,7 +72,7 @@ public class DynamicAuthenticationFilter extends FormAuthenticationFilter {
 
 
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean executeLogin(final ServletRequest request, final ServletResponse response) throws Exception {
         if (isAuthTypeNegotiate(request)) {
             log.debug("using filterNegotiate");
             return filterNegotiate.onAccessDenied(request, response);

@@ -15,8 +15,8 @@ import org.apache.shiro.realm.Realm;
  */
 public class DynamicAuthenticationStrategy extends FirstSuccessfulStrategy {
 
-    public AuthenticationInfo afterAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo singleRealmInfo,
-                                           AuthenticationInfo aggregateInfo, Throwable t)
+    public AuthenticationInfo afterAttempt(final Realm realm, final AuthenticationToken token, final AuthenticationInfo singleRealmInfo,
+                                           final AuthenticationInfo aggregateInfo, final Throwable t)
             throws AuthenticationException {
 
         if (realm instanceof NegotiateAuthenticationRealm && t instanceof AuthenticationInProgressException) {

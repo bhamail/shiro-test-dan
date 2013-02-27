@@ -72,12 +72,12 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
      *
      * @param rememberMeParam the name of the request param to check for acquiring the rememberMe boolean value.
      */
-    public void setRememberMeParam(String rememberMeParam) {
+    public void setRememberMeParam(final String rememberMeParam) {
         this.rememberMeParam = rememberMeParam;
     }
 
     @Override
-    protected boolean isRememberMe(ServletRequest request) {
+    protected boolean isRememberMe(final ServletRequest request) {
         return WebUtils.isTrue(request, getRememberMeParam());
 
     }
@@ -141,7 +141,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         }
     }
 
-    protected void setFailureAttribute(ServletRequest request, AuthenticationException ae) {
+    protected void setFailureAttribute(final ServletRequest request, final AuthenticationException ae) {
         String className = ae.getClass().getName();
         request.setAttribute(getFailureKeyAttribute(), className);
     }
@@ -150,7 +150,7 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
         return failureKeyAttribute;
     }
 
-    public void setFailureKeyAttribute(String failureKeyAttribute) {
+    public void setFailureKeyAttribute(final String failureKeyAttribute) {
         this.failureKeyAttribute = failureKeyAttribute;
     }
 
