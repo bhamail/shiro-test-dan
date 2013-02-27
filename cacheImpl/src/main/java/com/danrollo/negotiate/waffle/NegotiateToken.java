@@ -11,7 +11,6 @@ package com.danrollo.negotiate.waffle;
 import javax.security.auth.Subject;
 
 import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.HostAuthenticationToken;
 import org.apache.shiro.authc.RememberMeAuthenticationToken;
 
