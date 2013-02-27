@@ -18,6 +18,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,24 +54,56 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
                                // setspn -A HTTP/<server-fqdn> <user_tomcat_running_under>
     }
 
+    private String failureKeyAttribute = FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME;
+
+    private String rememberMeParam = FormAuthenticationFilter.DEFAULT_REMEMBER_ME_PARAM;
+
+    public String getRememberMeParam() {
+        return rememberMeParam;
+    }
+
+    /**
+     * Sets the request parameter name to look for when acquiring the rememberMe boolean value.  Unless overridden
+     * by calling this method, the default is <code>rememberMe</code>.
+     * <p/>
+     * RememberMe will be <code>true</code> if the parameter value equals any of those supported by
+     * {@link org.apache.shiro.web.util.WebUtils#isTrue(javax.servlet.ServletRequest, String) WebUtils.isTrue(request,value)}, <code>false</code>
+     * otherwise.
+     *
+     * @param rememberMeParam the name of the request param to check for acquiring the rememberMe boolean value.
+     */
+    public void setRememberMeParam(String rememberMeParam) {
+        this.rememberMeParam = rememberMeParam;
+    }
 
     @Override
-    protected AuthenticationToken createToken(final ServletRequest in,
-                                              final ServletResponse out)  {
-        final String authorization = getAuthzHeader(in);
+    protected boolean isRememberMe(ServletRequest request) {
+        return WebUtils.isTrue(request, getRememberMeParam());
+
+    }
+
+
+    @Override
+    protected AuthenticationToken createToken(final ServletRequest request,
+                                              final ServletResponse response)  {
+        final String authorization = getAuthzHeader(request);
         final String[] elements = authorization.split(" ");
         final byte[] inToken = Base64.decode(elements[1]);
 
         // maintain a connection-based session for NTLM tokns
-        final String connectionId = NtlmServletRequest.getConnectionId((HttpServletRequest)in); // @todo see about changing this parameter to ServletRequest in waffle
+        final String connectionId = NtlmServletRequest.getConnectionId((HttpServletRequest)request); // @todo see about changing this parameter to ServletRequest in waffle
         final String securityPackage = elements[0];
 
-        final AuthorizationHeader authorizationHeader = new AuthorizationHeader((HttpServletRequest)in); // @todo see about changing this parameter to ServletRequest in waffle
+        final AuthorizationHeader authorizationHeader = new AuthorizationHeader((HttpServletRequest)request); // @todo see about changing this parameter to ServletRequest in waffle
         final boolean ntlmPost = authorizationHeader.isNtlmType1PostAuthorizationHeader();
 
         log.debug("security package: " + securityPackage + ", connection id: " + connectionId + ", ntlmPost: " + ntlmPost);
 
-        return new NegotiateToken(inToken, new byte[0], connectionId, securityPackage, ntlmPost);
+        final boolean rememberMe = isRememberMe(request);
+        final String host = getHost(request);
+
+
+        return new NegotiateToken(inToken, new byte[0], connectionId, securityPackage, ntlmPost, rememberMe, host);
     }
 
 
@@ -96,15 +129,30 @@ public class NegotiateAuthenticationFilter extends AuthenticatingFilter
             final String protocol = getAuthzHeaderProtocol(request);
             log.debug("Negotiation in progress for protocol: " + protocol);
             sendChallengeDuringNegotiate(protocol, response, t.getOut());
+            return false;
         } else {
             log.warn("login exception: " + e.getMessage());
 
             // do not send token.out bytes, this was a login failure.
             sendChallengeOnFailure(response);
+
+            setFailureAttribute(request, e);
+            return true;
         }
-        return false;
     }
 
+    protected void setFailureAttribute(ServletRequest request, AuthenticationException ae) {
+        String className = ae.getClass().getName();
+        request.setAttribute(getFailureKeyAttribute(), className);
+    }
+
+    public String getFailureKeyAttribute() {
+        return failureKeyAttribute;
+    }
+
+    public void setFailureKeyAttribute(String failureKeyAttribute) {
+        this.failureKeyAttribute = failureKeyAttribute;
+    }
 
 
     @Override
