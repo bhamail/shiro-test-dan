@@ -18,6 +18,14 @@
     <name>My custom shiro cache impl</name>
     <url>http://maven.apache.org</url>
 
+    <!-- @todo Remove this repo tag after waffle-shiro classes are released. -->
+    <repositories>
+        <repository>
+            <id>waffle-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
