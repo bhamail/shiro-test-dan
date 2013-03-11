@@ -3,6 +3,10 @@ shiro-test-dan
 
 Simple Test project(s) using Shiro
 
+Shiro can be configured via the file: shiro.ini.  See cacheImpl/src/main/resources/shiro.ini.
+
+Shiro docs for more configuration info: http://shiro.apache.org/web.html#Web-Configuration
+
 
 The branches contain various experiments:
 
@@ -13,6 +17,8 @@ The branches contain various experiments:
 
 * master - Contains custom Cache and CacheManager implementations in addition to SessionDAO implementations that can
         store to disk or in memory.
+
+* waffleAuthStrategy - a dynamic filter that allows a user to select an authentication type at runtime.
 
 
 Setup

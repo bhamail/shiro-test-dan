@@ -11,6 +11,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
+ * Allows a user selectable authentication type at runtime. Requires use of {@link DynamicAuthenticationStrategy} when
+ * more than one realm is configured in shiro.ini (which should be the case for multiple authentication type options).
+ *
  * @author Dan Rollo
  * Date: 2/21/13
  * Time: 9:08 PM
@@ -23,6 +26,9 @@ public class DynamicAuthenticationFilter extends FormAuthenticationFilter {
     public static final String PARAM_NAME_AUTHTYPE = "authType";
     public static final String PARAM_VAL_AUTHTYPE_NEGOTIATE = "j_negotiate";
 
+    /**
+     * Wrapper to make protected methods in different package callable from here.
+     */
     private static final class WrapNegotiateAuthenticationFilter extends NegotiateAuthenticationFilter {
 
         private final DynamicAuthenticationFilter parent;
@@ -48,6 +54,9 @@ public class DynamicAuthenticationFilter extends FormAuthenticationFilter {
 
 
 
+    /**
+     * Wrapper to make protected methods in different package callable from here.
+     */
     private static final class WrapFormAuthenticationFilter extends FormAuthenticationFilter {
 
         private final DynamicAuthenticationFilter parent;
@@ -70,7 +79,12 @@ public class DynamicAuthenticationFilter extends FormAuthenticationFilter {
     private final WrapFormAuthenticationFilter filterFormAuthc = new WrapFormAuthenticationFilter(this);
 
 
-
+    /**
+     * Call {@link org.apache.shiro.web.filter.AccessControlFilter#onAccessDenied(javax.servlet.ServletRequest, javax.servlet.ServletResponse)}
+     * for the user selected authentication type, which performs login logic.
+     *
+     * {@inheritDoc}
+     */
     @Override
     protected boolean executeLogin(final ServletRequest request, final ServletResponse response) throws Exception {
         if (isAuthTypeNegotiate(request)) {
