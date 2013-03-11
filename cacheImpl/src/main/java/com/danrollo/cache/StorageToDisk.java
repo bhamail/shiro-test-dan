@@ -26,7 +26,7 @@ class StorageToDisk extends Storage {
     }
 
     @Override
-    public void store(final Serializable objectToStore) {
+    synchronized void store(final Serializable objectToStore) {
         try {
 
             final FileOutputStream fos = new FileOutputStream(diskFile);
@@ -47,7 +47,7 @@ class StorageToDisk extends Storage {
     }
 
     @Override
-    public Object load() {
+    synchronized Object load() {
         try {
             final FileInputStream fis = new FileInputStream(diskFile);
             try {

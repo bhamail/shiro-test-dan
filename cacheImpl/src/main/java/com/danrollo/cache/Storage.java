@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Date: 8/15/12
  * Time: 11:29 PM
  */
-public abstract class Storage {
+abstract class Storage {
 
     protected final String storeName;
 
