@@ -15,7 +15,6 @@
         <module>cacheImpl</module>
         <module>appone</module>
         <module>apptwo</module>
-        <!--<module>waffleFilterTest</module>-->
     </modules>
 
     <properties>
