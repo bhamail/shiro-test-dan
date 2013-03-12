@@ -10,12 +10,6 @@ import java.io.Serializable;
  */
 abstract class Storage {
 
-    protected final String storeName;
-
-    Storage(final String name) {
-        storeName = name;
-    }
-
     abstract void initStore(Serializable itemToStore);
 
     abstract void store(final Serializable itemToStore);

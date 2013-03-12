@@ -13,13 +13,13 @@ import java.util.Hashtable;
  * Date: 8/16/12
  * Time: 11:41 AM
  */
-public class MySessionDAO extends CachingSessionDAO {
+class MySessionDAO extends CachingSessionDAO {
 
     private Hashtable<Serializable, Session> map = new Hashtable<Serializable, Session>();
 
     private final Storage storage;
 
-    public MySessionDAO(final Storage storage) {
+    MySessionDAO(final Storage storage) {
         this.storage = storage;
         storage.initStore(map);
     }

@@ -13,7 +13,6 @@ class StorageToDisk extends Storage {
     private final File diskFile;
 
     StorageToDisk(final String name) {
-        super(name);
         diskFile = new File(System.getProperty("java.io.tmpdir"), name);
     }
 
