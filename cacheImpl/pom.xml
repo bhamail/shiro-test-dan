@@ -76,11 +76,6 @@
             <version>3.5.1</version>
         </dependency>
         <dependency>
-            <groupId>com.github.dblock.waffle</groupId>
-            <artifactId>waffle-tomcat6</artifactId>
-            <version>${waffle.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>13.0.1</version>
