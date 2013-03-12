@@ -40,12 +40,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
-        </dependency>
-
-
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
@@ -59,26 +53,11 @@
             <artifactId>waffle-shiro</artifactId>
             <version>${waffle.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.dblock.waffle</groupId>
-            <artifactId>waffle-jna</artifactId>
-            <version>${waffle.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>3.5.1</version>
-        </dependency>
+        <!-- @todo Remove this dep when waffle updates to using latest jna release. Dep exists only to get latest jna. -->
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>platform</artifactId>
             <version>3.5.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>13.0.1</version>
         </dependency>
 
         <dependency>
