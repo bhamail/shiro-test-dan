@@ -55,3 +55,5 @@ Setup
     apache-tomcat-6.0.35$ bin/catalina.sh jpda start
 
    Once deployed, you can login to each webapp with uid: admin, pwd: secret (see cacheImpl/src/main/resources/shiro.ini).
+
+   Important: Windows Single-Sign-On will likely not work as expected when the tomcat server is NOT run as a NT Service.
