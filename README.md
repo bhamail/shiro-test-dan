@@ -20,6 +20,7 @@ The branches contain various experiments:
 
 * waffleAuthStrategy - a dynamic filter that allows a user to select an authentication type at runtime.
 
+* waffleAuthStrategyMin - same as above, but with unused libraries deleted.
 
 Setup
 

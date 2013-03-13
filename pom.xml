@@ -11,6 +11,12 @@
 
     <name>shiro-test-dan</name>
 
+    <scm>
+        <url>https://github.com/bhamail/shiro-test-dan/tree/waffleAuthStrategyMin</url>
+        <connection>scm:git:git@github.com:bhamail/shiro-test-dan.git</connection>
+        <tag>waffleAuthStrategyMin</tag>
+    </scm>
+
     <modules>
         <module>cacheImpl</module>
         <module>appone</module>
@@ -105,6 +111,8 @@
                     Note: To remote debug tomcat on port 8000, use: bin/catalina.sh jpda start
                     -->
                     <server>mylocalserver</server>
+                    <!--<url>http://jhite-red.nycapt35k.com:8080/manager/</url>-->
+                    <url>http://drollo2k3.nycapt35k.com:8080/manager/</url>
                 </configuration>
             </plugin>
 
