@@ -18,8 +18,13 @@
     <name>My custom shiro cache impl</name>
     <url>http://maven.apache.org</url>
 
-    <!-- @todo Remove this repo tag after waffle-shiro classes are released. -->
+    <!-- @todo Remove this repo tag after latest jna and waffle-shiro versions are released. -->
     <repositories>
+        <repository>
+            <id>jna-snapshots</id>
+            <url>https://maven.java.net/content/repositories/snapshots/</url>
+        </repository>
+
         <repository>
             <id>waffle-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -58,6 +63,7 @@
             <groupId>net.java.dev.jna</groupId>
             <artifactId>platform</artifactId>
             <version>3.5.1</version>
+            <!--<version>3.5.2-SNAPSHOT</version>-->
         </dependency>
 
         <dependency>
