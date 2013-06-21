@@ -10,6 +10,8 @@
     <packaging>pom</packaging>
 
     <name>shiro-test-dan</name>
+    <description>A simple test project to exercise Single-Sign-On using the Apache Shiro framework.
+        For details, see README.md at: https://github.com/bhamail/shiro-test-dan</description>
 
     <url>https://github.com/bhamail/shiro-test-dan.git</url>
 

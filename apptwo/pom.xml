@@ -16,7 +16,6 @@
     <packaging>war</packaging>
 
     <name>apptwo Maven Webapp</name>
-    <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>

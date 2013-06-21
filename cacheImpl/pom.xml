@@ -16,7 +16,7 @@
     <packaging>jar</packaging>
 
     <name>My custom shiro cache impl</name>
-    <url>http://maven.apache.org</url>
+    <description>Custom cache implementations and Session Management objects to store session info in memory or to disk.</description>
 
     <dependencies>
         <dependency>
