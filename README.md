@@ -66,3 +66,5 @@ How about Kathryn's plugin: https://github.com/khuxtable/wagon-gitsite.
 Oops, looks like Stephens gitsite fork is more recent/active: https://github.com/stephenc/wagon-gitsite. See [Instructions](http://stephenc.github.com/wagon-gitsite/).
 
 The resulting site is available here: http://bhamail.github.com/shiro-test-dan/.
+
+*** NOTE: The ```wagon-gitsite``` approach is basicaly deprecated in favor of: [maven-scm-publish-plugin](http://maven.apache.org/plugins/maven-scm-publish-plugin/)
